@@ -1,0 +1,36 @@
+version: "1.0"
+
+volumes:
+  pgadmin-data: {}
+  postgres-data: {}
+
+services:
+  pgadmin:
+    image: dpage/pgadmin4
+    build:
+      context: .
+      dockerfile: ./pgadmin/Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@local.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 80
+    links:
+      - "postgres:postgres"
+    ports:
+      - 8080:80
+    restart: unless-stopped
+    volumes:
+      - pgadmin-data:/var/lib/postgresql/data
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+
+  postgres:
+    image: postgres:14.7-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data

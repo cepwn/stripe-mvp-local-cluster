@@ -1,0 +1,2 @@
+host.docker.internal:5432:*:postgres:postgres
+host.docker.internal:54320:*:postgres:postgres
